@@ -9,6 +9,7 @@
 int chopsticksMain();
 void drawHands(int[],int[]);
 void printFingers(char);
+int canSplit(int[]);
 
 int main(){
 	
@@ -114,4 +115,16 @@ void printFingers(char which)
 			break;
 		}
 	}
+}
+//function to check if user or computer can split hands 1=yes 0=no
+int canSplit(int array1[]){
+	
+	//top empty bottom >1
+	if (array1[0]==0 && array1[1]>1)
+		return 1;
+	//bottom empty top >1
+	if (array[1]==0 && array1[0]>1)
+		return 1;
+		
+	return 0;
 }
