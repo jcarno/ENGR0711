@@ -167,15 +167,135 @@ void printFingers(char which)
 }
 //function to check if user or computer can split hands 1=yes 0=no
 int canSplit(int array1[]){
+
 	
 	//top empty bottom >1
 	if (array1[0]==0 && array1[1]>1){
 		return 1;
 	}
 	//bottom empty top >1
-	if (array[1]==0 && array1[0]>1){
-		return 1;
-	}
+	
+	if (array1[1]==0 && array1[0]>1)
+	{
+		return 0;
+	} 
 		
-	return 0;
+	return -1;
+}
+
+int userTurn(int user[], int computer[])
+{
+	int splitresult,input; 
+	splitresult=canSplit(user); 
+	
+	//printf("%d", splitresult); 
+	
+	 
+	char cond1='z'; 
+	
+	
+	if(splitresult==0) //top heavy, top is greater than
+	{
+		while( cond1!='y' && cond1!='n')
+		{
+			printf("Do you want to split?");
+			scanf(" %c", &cond1); 
+		}
+		
+		while(input<1 || input>user[1])
+		{
+			printf("How many fingers do you want to send to the other hand?\n");
+			printf("You can only enter numbers between %d.\n", user[1]); 
+			scanf("%d",&input); 
+		}
+		
+		user[0]=input; 
+		user[1]=user[1]-input; 
+		
+	}else if (splitresult==1) //bottom greater than top
+	{
+	
+		while(cond1!='y' && cond1!='n')
+		{
+			printf("Do you want to split?"); 
+			scanf(" %c",&cond1); 
+		}
+		
+		while(input<1 || input>user[0])
+		{
+			printf("How many fingers do you want to send to the other hand?\n"); 
+			printf("You can only enter numbers between %d.\n", user[0]);
+			scanf("%d",&input); 
+		}
+		
+		user[1]=input;
+		user[0]=user[0]-input; 
+	}else if(splitresult==-1)
+	{
+		printf("You can't split."); 
+		
+	}
+	
+	int computer_fingerchoice;
+	printf("Which computer finger do you want to hit?");
+	while( computer_fingerchoice!=0 && computer_fingerchoice!=1)
+	{
+		printf("Enter 0 for bottom. Enter 1 for top."); 
+		scanf("%d",&computer_fingerchoice);
+	}
+	
+	
+	int user_fingerchoice; 
+	printf("What finger do you want to use?"); 
+	while(user_fingerchoice!=0 && user_fingerchoice!=1)
+	{
+		printf("Enter 0 for bottom. Enter 1 for top."); 
+		scanf("%d",&user_fingerchoice);		
+	}
+	
+	
+		
+	if(user_fingerchoice==0 && computer_fingerchoice==0) //user bottom to user botton
+	{
+		computer[0]=computer[0]+user[0];
+		
+	}else if (user_fingerchoice==0 && computer_fingerchoice==1) //user bottom to user top
+	{
+	
+		computer[1]=computer[1]+user[0];
+	}
+	else if (user_fingerchoice==1 && computer_fingerchoice==0) //user top to computer bottom
+	{
+		computer[0]=computer[0]+user[1];
+	}
+	else if (user_fingerchoice==1 && computer_fingerchoice==1) //user top to computer top
+	{
+		computer[1]=computer[1]+user[1];
+	}
+	
+
+	if(user[0]%5>=1)
+	{
+		return 2; 
+	}
+	
+	return 1; 
+	
+
+	
+}
+void turnSummary(char turn, int user[], int computer[])
+{
+	switch (turn)
+	{
+		case 'c':
+		printf("The computer hit user. The computer left hand has %d the right hand has %d.", computer[0], computer[1]); 
+		break; 
+		
+		case 'u':
+		printf("The user hit computer.The user left hand %d and the right hand has %d.",user[0], user[1]);
+		break; 
+		
+	}
+	
 }
