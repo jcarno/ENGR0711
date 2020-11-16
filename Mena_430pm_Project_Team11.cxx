@@ -120,11 +120,13 @@ void printFingers(char which)
 int canSplit(int array1[]){
 	
 	//top empty bottom >1
-	if (array1[0]==0 && array1[1]>1)
+	if (array1[0]==0 && array1[1]>1){
 		return 1;
+	}
 	//bottom empty top >1
-	if (array[1]==0 && array1[0]>1)
+	if (array[1]==0 && array1[0]>1){
 		return 1;
+	}
 		
 	return 0;
 }
