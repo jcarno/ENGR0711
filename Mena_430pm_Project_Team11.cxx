@@ -20,10 +20,50 @@ int main(){
 
 int chopsticksMain()
 {
+	//declare vars
 	int user[]={1,1};
 	int computer[]={1,1};
-	drawHands(user,computer);
-	return 0;
+	int result=1, turn=0; //turn is 0 when user's turn, 1 when computers
+	char quit;
+	
+	//show directions 
+	printf("\nLet\'s play chopsticks!\n");
+	printf("Your goal: Beat the computer by eliminating both of their hands.\n");
+	printf("To eliminate a hand, hit it with one of yours, and the number of fingers will add.\n");
+	printf("If you hit the other player\'s hand so they have exactly five fingers, that hand is out.\n");
+	
+	//loop for turns until someone wins
+	while (result==1)
+	{
+		//draw hands
+		drawHands(user,computer);
+		
+		//if user turn
+		if (turn==0)
+		{
+			//ask if they want to opt out
+			printf("Enter q to quit, enter anything else to play your turn: ");
+			scanf(" %c",&quit);
+			if (quit=='q'){
+				break;
+			}
+			
+			result=userTurn(user,computer);
+			
+		}
+		//computer turn
+		else
+		{
+			result=computerTurn(user,computer);
+		}
+		
+		
+		//increment whos turn it is by using remainder
+		turn =(turn+1)%2;
+	}
+	
+	
+	return result;
 }
 
 void drawHands(int user[],int computer[])
