@@ -57,14 +57,23 @@ int chopsticksMain()
 			result=computerTurn(user,computer);
 		}
 		
+		//ask if they want to opt out if no one has won yet
+		if (result==1){
+			printf("Enter q to quit, enter anything else to keep playing: ");
+			scanf(" %c",&quit);
+			if (quit=='q'){
+				break;
+			}
+		}	
 		
 		//increment whos turn it is by using remainder
 		turn =(turn+1)%2;
 	}
 	
-	
+			
 	return result;
 }
+
 
 void drawHands(int user[],int computer[])
 {
