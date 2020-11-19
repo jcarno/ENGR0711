@@ -481,3 +481,151 @@ void turnSummary(char turn, int handUsed, int handHit)
 	}
 	
 }
+
+void WhoDunnit(void)
+{
+	//Variables
+	char name[50];
+	int sci,evi,evidencecompletion[3],loc,explorecompletion[3],gary2;
+	//Will give a description of what is going on
+	GameIntro(name);
+	
+	//User will enter 1 to get dialogue from forensic scientist
+	printf("\nAlright Detective %s, first things first, you need to talk to the forensic scientist about the body. \nCHOP CHOP! NO TIME TO WASTE!\n (Press 1 to talk to the forensic scientist)\n",name);
+	scanf("%d",&sci);
+	
+	while(sci!=1)
+	{
+		printf("Would you quit goofing off, %s! The murderer is getting away! Trust me I saw it on First 48. But seriously get to the forensic scientist (Press 1) \n",name);
+		scanf("%d",&sci);
+	}
+	
+	if(sci==1)
+	{
+		//User will choose with an integer which piece of evidence they would like to review first
+		printf("\nForensic scientist: Welcome Detective %s, I have found a few pieces of evidence that could give us some leads.\n Which would you like to hear about first?\n",name);
+		printf("1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
+		scanf("%d",&evi);
+	}
+	
+	while(evi!=1&&evi!=2&&evi!=3)
+	{
+		printf("C'mon Detective %s! Quit horsin around. Which evidence do you want to look at first?\n",name);
+		scanf("%d",&evi);
+	}
+	//This function will go into detail what each piece of evidence reveals
+	EvidenceExamination(evi,evidencecompletion);
+	
+	//Asks user which location would they like to travel to first
+	printf("Alright Detective %s, what would you like to do now?\n1)Search Schenley Plaza more\n2)Search victim's dorm\n",name);
+	scanf("%d",&loc);
+	while(loc!=1&&loc!=2)
+	{
+		printf("C'mon %s you can't go there be serious. Where do you want to go?\n1)Search Schenley Plaza more\n2)Search victim's dorm\n",name);
+		scanf("%d",&loc);
+	}
+	gary2=LocationExploration(loc,name);
+	
+}
+//Function declaration
+void GameIntro(char name[])
+{
+	printf("It was a quiet night in Oakland until... MURDER! Yes that's right...\nA John D. Cranbury was found dead in Schenley Plaza. He was such a diligent, proactive, involved\nstudent that was respected and adored by many. However, with that much attention, one is always bound to draw enemies\nand John's days were numbered. That is why we need YOU, detective, to solve this crime.\nFirst..., remind me of your name again?\n");
+	scanf("%s",name);
+}
+void EvidenceExamination(int evi,int evidencecompletion[])
+{
+	
+	do
+	{
+	switch(evi)
+	{
+	case 1:
+	printf("\nThe victim was a 6 foot tall, 200 pound Caucasian male. The body was found around 12am on November 13, 2020. \nThe patient's medical history showed nothing of concern with no allergies or underlying conditions. \nThere were no external signs of trauma but an autopsy revealed that the victim had been poisoned with cyanide.\n");
+	evidencecompletion[0]=1;
+	printf("\nWhat evidence do you want to look at now?\n");
+	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
+	scanf("%d",&evi);
+	break;
+	
+	case 2:
+	printf("\nThe victim was found wearing a collared shirt, jeans, a Rolex, and light rain jacket. While the watch was quite valuable and still remained, his shoes, wallet, and phone were taken.\n");
+	printf("\nWhat evidence do you want to look at now?\n");
+	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
+	scanf("%d",&evi);
+	evidencecompletion[1]=1;
+	break;
+	
+	case 3:
+	printf("\nFound next to the victim was a takeout box with a burger with only one bite taken out of it.\n");
+	printf("\nWhat evidence do you want to look at now?\n");
+	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
+	scanf("%d",&evi);
+	evidencecompletion[2]=1;
+	break;
+}
+}while(evidencecompletion[0]!=1&&evidencecompletion[1]!=1&&evidencecompletion[2]!=1);
+
+}
+int LocationExploration(int loc,char name[])
+{
+	int schenleychoice,gary2=0;
+	switch(loc)
+	{
+	case 1:
+	printf("Well Detective %s, I think some of the best witnesses would be at that 'Porch' restaurant or maybe some of the shuttle drivers. What do you think?\n",name);
+	printf("1)The Porch employees\n2)Shuttle drivers\n");
+	scanf("%d",&schenleychoice);
+	while(schenleychoice!=1&&schenleychoice!=2)
+	{
+		printf("%s We don't have time to waste! Who do you want to interrogate?\n",name);
+		scanf("%d",&schenleychoice);
+	}
+	if(schenleychoice==1)
+	{
+		printf("Restaurant employee: Yeah I work here. Good thing you came in before we closed early. I saw John last night he ordered 3 burgers for him and his girlfriend Jenny and his buddy James.\n I remember he was wearing some really loud shoes that drew attention. They were some high top neon green Nikes. To me they were pretty ugly but John was such a sneakerhead and a good friend and I'm gonna miss him. Please find the man that killed him.\n");
+		printf("\n\nThat gives us some more information. Damn, the shuttles left us. Let's go to John's dorm now.\n");
+	}
+	
+	else if(schenleychoice==2)
+	{
+		printf("Shuttle driver: I remember John's face. He came here with 2 other people earlier in the night but when his two friends rode the shuttle back it was just them. I think it was his girlfriend and another friend of his.\n");
+		printf("\n Ok we should look into his girlfriend and other friend that was with him. According to the bus' ID scanner history, a few hours before the time of death a Jenny A. and James B. caught the shuttle from Sutherland. Let's go check out The Porch. Oh no! They're closed!\nWell what do you want to do now?:\n1)Search victim's dorm\n2)Interrogate friends\n");
+	}
+	
+	case 2:
+	printf("\nThe victim lived on the 8th floor of Tower C in a single room. The room was cleaned almost in a suspicious manner. The victim appears to have quite the collection of shoes. The victim's MacBook is here but appears to be severely damaged. Perhaps the tech team can recover the hard drive's content. A container of cyanide was placed haphazardly in the middle of the floor.\nKNOCK! KNOCK!\n\nGary G:Hey I'm Gary, John's neighbor, what's going on over here?\n");
+	int gary;
+	while(gary!=1&&gary!=2)
+	{
+	printf("\nChoose one of the following dialogue options:\n1)We are investigating the murder of John Cranbury. Do you have any information that you think you could offer us?\n2)Sir this is the site of a crime scene we need you to leave the premises now!\n");
+	scanf("%d",&gary);
+}
+if(gary==2)
+{
+	printf("\nGeez man. You didn't have to turn me down like that. I might've had some helpful information for you. Have a good one jerk.\n");
+}
+else if(gary==1)
+{
+	printf("\nOh yeah, RIP John. I'm gonna miss that dude. He always had the cleanest shoe game. Yesterday, he was wearing some fire kicks you should've seen em. I know his girlfriend was really obsessive and jealous over how he spent too much time and money towards his shoe collection. But I would literally KILL to have some of the kicks he had.\n");
+	gary2=0;
+	while(gary2!=1&&gary2!=2)
+	{
+	printf("\nChoose one of the following dialogue options:\n1)Thanks Gary, anything else you want us to know?\n2)Thank you for your time Gary that will be all.\n");
+	scanf("%d",&gary2);
+}
+
+if(gary2==1)
+{
+	printf("\nGary: Yeah, I dunno if this has anything to do with the crime but I heard some noise outside my room that sounding like it was coming from John's room around midnight or 1 in the morning. I almost ignored it but I peeped outside and saw it was John's girlfriend going into his room. I didn't think much of it because she has visited him before so I just went back to bed.\n");
+}
+else if(gary2==2)
+{
+	printf("\nGary: Happy to help. Lemme know if you need anything else.\n");
+}
+}
+}
+
+
+	return(gary2);
+}
