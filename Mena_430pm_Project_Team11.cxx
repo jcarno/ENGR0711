@@ -13,7 +13,10 @@ int canSplit(int[]);
 int computerTurn(int[],int[]);
 int userTurn(int[],int[]);
 void turnSummary(char,int,int);
-
+void WhoDunnit(void);
+void GameIntro(char[]);
+void EvidenceExamination(int,int[]);
+int LocationExploration(int,char[]);
 
 int main(){
 	//Variables
