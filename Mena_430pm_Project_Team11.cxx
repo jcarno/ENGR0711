@@ -16,9 +16,26 @@ void turnSummary(char,int,int);
 
 
 int main(){
+	//Variables
+	int gamechoice;
+	//Asks user which game they want to play, either Chopsticks or Who Dunnit?
+	while(gamechoice!=1&&gamechoice!=2)
+	{
+		printf("Which game would you like to play?\n1)Chopsticks\n2)Who Dunnit?\n");
+		scanf("%d",&gamechoice);
+	}
 	
+	//Will run Chopsticks
+	if(gamechoice==1)
+	{
 	chopsticksMain();
-	
+	}
+	 
+	//Will run Who Dunnit?
+	if(gamechoice==2)
+	{
+		WhoDunnit();
+	}
 	return 0;
 	
 }
