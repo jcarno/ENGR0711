@@ -20,7 +20,7 @@ int LocationExploration(int,char[]);
 
 int main(){
 	//Variables
-	int gamechoice;
+	int gamechoice,chopResult;
 	//Asks user which game they want to play, either Chopsticks or Who Dunnit?
 	while(gamechoice!=1&&gamechoice!=2)
 	{
@@ -31,7 +31,26 @@ int main(){
 	//Will run Chopsticks
 	if(gamechoice==1)
 	{
-	chopsticksMain();
+		chopResult=chopsticksMain();
+		//display result of game
+		switch (chopsticksResult)
+		{
+			case 1:
+			{
+				printf("You have opted to quit. \n");
+				break;
+			}
+			case 2:
+			{
+				printf("Congradulations! You won! \n");
+				break;
+			}
+			case 0:
+			{
+				printf("You lost :( \n");
+				break;
+			}
+		}
 	}
 	 
 	//Will run Who Dunnit?
@@ -49,7 +68,8 @@ int chopsticksMain()
 	//declare vars
 	int user[]={1,1};
 	int computer[]={1,1};
-	int result=1, turn=0; //turn is 0 when user's turn, 1 when computers
+	
+	int result=1, turn=0; //turn is 0 when user turn, 1 when computer's turn
 	char quit;
 	
 	//show directions 
@@ -212,7 +232,7 @@ int computerTurn(int user[],int computer[]){
 	//set up array with computer possible hits: top-top,top-bottom, bottom-top, bottom-bottom
 	int possibilities[4]={(computer[0]+user[0])%5,(computer[0]+user[1])%5,(computer[1]+user[0])%5,(computer[1]+user[1])%5};
 	
-	//act in order of: get out a hand, allows winning combo next turn,split, closest to 5 on user
+	//act in order of: get out a hand, allows winning combo next turn,split, random hit
 	
 	//see if can get out a hand
 	for (i=0;i<4;i++){
@@ -236,21 +256,10 @@ int computerTurn(int user[],int computer[]){
 	}
 	
 	
-	//check if potentially can get a hand out next turn by checking possibilities+current hand
-	for (i =0;i<4;i++){
-		//check if win, use integer division & remainders to get indexes for computer and user
-		if (((possibilities[i]+computer[0])%5==0 || (possibilities[i]+computer[1])%5==0)&& computer[i/2]!=0){
-			user[i%2]=possibilities[i];
-			turnSummary('c',i/2,i%2);
-		
-			//return 1 to exit function
-			return 1;
-		}
-		
-		
-	}
-	
-	//top hand can split
+	//random if computer attempts to split (Make it winnable)
+	if (rand()%3==1)
+	{
+		//top hand can split
 	if (canSplit(computer)==0){
 		//break apart based on number of fingers, do in most even result
 		if (computer[0]==2)
@@ -273,47 +282,45 @@ int computerTurn(int user[],int computer[]){
 		}
 		
 		return 1;
-			
-	}
-	//bottom hand can split
-	else if (canSplit(computer)==1){
-		//break apart based on number of fingers, do in most even result
-		if (computer[1]==2)
-		{
-			computer[0]=1;
-			computer[1]=1;
-			printf("Computer split fingers. 1 finger moved from bottom to top hand. \n");
 		}
-		else if (computer[1]==3)
-		{
-			computer[0]=1;
-			computer[1]=2;
-			printf("Computer split fingers. 1 finger moved from bottom to top hand. \n");
-		}
-		else if (computer[1]==4)
-		{
-			computer[0]=2;
-			computer[1]=2;
-			printf("Computer split fingers. 2 fingers moved from bottom to top hand. \n");
-		}
+	
+		//bottom hand can split
+		else if (canSplit(computer)==1){
+			//break apart based on number of fingers, do in most even result
+			if (computer[1]==2)
+			{
+				computer[0]=1;
+				computer[1]=1;
+				printf("Computer split fingers. 1 finger moved from bottom to top hand. \n");
+			}
+			else if (computer[1]==3)
+			{
+				computer[0]=1;
+				computer[1]=2;
+				printf("Computer split fingers. 1 finger moved from bottom to top hand. \n");
+			}
+			else if (computer[1]==4)
+			{
+				computer[0]=2;
+				computer[1]=2;
+				printf("Computer split fingers. 2 fingers moved from bottom to top hand. \n");
+			}
 		
-		return 1;
+			return 1;
+		}	
+	
+	
 	}
+	//if all else fails - do random hit 
+	int val,ind;
+	do{
+		ind=rand()%4;
+		val=possibilities[ind];
+	}while (user[ind%2]==0 || computer[ind/2]==0);
 	
-	//if all else fails - do whatever gets computer closest to 5
-	int maxIndex,maxVal=0;
+	user[ind%2]=val;
 	
-	for (i =0;i<4;i++){
-		//check if win, use integer division & remainders to get indexes for computer and user
-		if (possibilities[i]>maxVal){
-			maxVal=possibilities[i];
-			maxIndex=i;
-		}
-	}
-	
-	user[maxIndex%2]=maxVal;
-	
-	turnSummary('c',maxIndex/2,maxIndex%2);
+	turnSummary('c',ind/2,ind%2);
 	
 	return 1;
 	
@@ -322,9 +329,10 @@ int computerTurn(int user[],int computer[]){
 	
 }
 
+//ask user to 
 int userTurn(int user[], int computer[])
 {
-	int splitresult,input; 
+	int splitresult,input=0; 
 	splitresult=canSplit(user); 
 	
 	//printf("%d", splitresult); 
@@ -333,45 +341,52 @@ int userTurn(int user[], int computer[])
 	char cond1='z'; 
 	
 	
-	if(splitresult==0) //top heavy, top is greater than
+	if(splitresult==0) //top heavy, top is greater than bottom
 	{
 		while( cond1!='y' && cond1!='n')
 		{
-			printf("Do you want to split?");
+			printf("Do you want to split? (y/n) ");
 			scanf(" %c", &cond1); 
 		}
 		
-		while(input<1 || input>user[1])
+		if (cond1!='n')
 		{
-			printf("How many fingers do you want to send to the other hand?\n");
-			printf("You can only enter numbers between 1 and %d.\n", user[1]-1); 
-			scanf("%d",&input); 
+			while(input<1 || input>user[0])
+			{
+				printf("How many fingers do you want to send to the other hand?\n");
+				printf("You can only enter numbers between 1 and %d.\n", user[0]-1); 
+				scanf("%d",&input); 
+			}
+			
+			user[1]=input; 
+			user[0]=user[0]-input; 
+			return 1;
 		}
 		
-		user[0]=input; 
-		user[1]=user[1]-input; 
-		return 1;
 		
 	}else if (splitresult==1) //bottom greater than top
 	{
 	
 		while(cond1!='y' && cond1!='n')
 		{
-			printf("Do you want to split?"); 
+			printf("Do you want to split? (y/n) "); 
 			scanf(" %c",&cond1); 
 		}
 		
-		while(input<1 || input>user[0])
+		if (cond1!='n')
 		{
-			printf("How many fingers do you want to send to the other hand?\n"); 
-			printf("You can only enter numbers between 1 and %d.\n", user[0]-1);
-			scanf("%d",&input); 
+			while(input<1 || input>user[1])
+			{
+				printf("How many fingers do you want to send to the other hand?\n"); 
+				printf("You can only enter numbers between 1 and %d.\n", user[1]-1);
+				scanf("%d",&input); 
+			}
+		
+			user[0]=input;
+			user[1]=user[1]-input; 
+		
+			return 1;
 		}
-		
-		user[1]=input;
-		user[0]=user[0]-input; 
-		
-		return 1;
 		
 	}else if(splitresult==-1)
 	{
@@ -385,6 +400,12 @@ int userTurn(int user[], int computer[])
 	{
 		printf("Enter 0 for top. Enter 1 for bottom. "); 
 		scanf("%d",&computer_fingerchoice);
+		
+		//if hand chosen has no fingers make them pick again
+		if (computer[computer_fingerchoice]==0){
+			printf("Invalid. No fingers on that hand. Pick again. \n");
+			computer_fingerchoice=-1;
+		}
 	}
 	
 	
@@ -394,6 +415,11 @@ int userTurn(int user[], int computer[])
 	{
 		printf("Enter 0 for top. Enter 1 for bottom. "); 
 		scanf("%d",&user_fingerchoice);		
+		//if hand chosen has no fingers make them pick again
+		if (user[user_fingerchoice]==0){
+			printf("Invalid. No fingers on that hand. Pick again. \n");
+			user_fingerchoice=-1;
+		}
 	}
 	
 	
