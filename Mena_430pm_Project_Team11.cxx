@@ -35,7 +35,7 @@ int main(){
 	{
 		chopResult=chopsticksMain();
 		//display result of game
-		switch (chopsticksResult)
+		switch (chopResult)
 		{
 			case 1:
 			{
@@ -512,6 +512,8 @@ void turnSummary(char turn, int handUsed, int handHit)
 
 void WhoDunnit(void)
 {
+	/*Welcome to WhoDunnit? You must solve the murder of John Cranbury. More information will follow from the game.
+	Good luck detective!*/
 	//Variables
 	char name[50];
 	int sci,evi,evidencecompletion[3],loc,gary2,interrogationcompletion[2],choice;
@@ -601,7 +603,7 @@ void EvidenceExamination(int evi,int evidencecompletion[],char name[])
 	printf("\nWhat evidence do you want to look at now?\n");
 	if(evidencecompletion[1]!=1)
 	{
-	printf("\n2) Belongings");
+	printf("\n2) Belongings\n");
 }
 if(evidencecompletion[2]!=1)
 {
@@ -626,7 +628,7 @@ if(evidencecompletion[2]!=1)
 	printf("\nWhat evidence do you want to look at now?\n");
 	if(evidencecompletion[0]!=1)
 	{
-		printf("\n1) Cause of death");
+		printf("\n1) Cause of death\n");
 	}
 	if(evidencecompletion[2]!=1)
 	{
@@ -651,7 +653,7 @@ if(evidencecompletion[2]!=1)
 	printf("\nWhat evidence do you want to look at now?\n");
 	if(evidencecompletion[0]!=1)
 	{
-		printf("\n1) Cause of death");
+		printf("\n1) Cause of death\n");
 	}
 	
 	if(evidencecompletion[1]!=1)
