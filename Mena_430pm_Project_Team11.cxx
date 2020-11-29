@@ -15,8 +15,10 @@ int userTurn(int[],int[]);
 void turnSummary(char,int,int);
 void WhoDunnit(void);
 void GameIntro(char[]);
-void EvidenceExamination(int,int[]);
+void EvidenceExamination(int,int[],char[]);
 int LocationExploration(int,char[]);
+void Interrogation(int,char[],int[],int);
+void Conclusion(char[],int);
 
 int main(){
 	//Variables
@@ -512,12 +514,12 @@ void WhoDunnit(void)
 {
 	//Variables
 	char name[50];
-	int sci,evi,evidencecompletion[3],loc,explorecompletion[3],gary2;
+	int sci,evi,evidencecompletion[3],loc,gary2,interrogationcompletion[2],choice;
 	//Will give a description of what is going on
 	GameIntro(name);
 	
 	//User will enter 1 to get dialogue from forensic scientist
-	printf("\nAlright Detective %s, first things first, you need to talk to the forensic scientist about the body. \nCHOP CHOP! NO TIME TO WASTE!\n (Press 1 to talk to the forensic scientist)\n",name);
+	printf("\nAlright Detective %s, first things first, you need to talk to the forensic scientist about the body. \nCHOP CHOP! NO TIME TO WASTE!\n(Press 1 to talk to the forensic scientist)\n",name);
 	scanf("%d",&sci);
 	
 	while(sci!=1)
@@ -534,24 +536,42 @@ void WhoDunnit(void)
 		scanf("%d",&evi);
 	}
 	
+	//This will error check to see if the user selected one of the 3 evidence options
 	while(evi!=1&&evi!=2&&evi!=3)
 	{
 		printf("C'mon Detective %s! Quit horsin around. Which evidence do you want to look at first?\n",name);
 		scanf("%d",&evi);
 	}
 	//This function will go into detail what each piece of evidence reveals
-	EvidenceExamination(evi,evidencecompletion);
+	EvidenceExamination(evi,evidencecompletion,name);
 	
 	//Asks user which location would they like to travel to first
-	printf("Alright Detective %s, what would you like to do now?\n1)Search Schenley Plaza more\n2)Search victim's dorm\n",name);
+	printf("\nAlright Detective %s, what would you like to do now?\n1)Search Schenley Plaza more\n2)Search victim's dorm\n",name);
 	scanf("%d",&loc);
+	
+	//This will error check to see if the user selected one of the available locations
 	while(loc!=1&&loc!=2)
 	{
 		printf("C'mon %s you can't go there be serious. Where do you want to go?\n1)Search Schenley Plaza more\n2)Search victim's dorm\n",name);
 		scanf("%d",&loc);
 	}
+	
+	//This function will explore the different locations based on the user's choice
 	gary2=LocationExploration(loc,name);
 	
+	//This will ask the user which suspect they would like to interrogate first
+	while(choice!=1&&choice!=2)
+	{
+	printf("\nDetective %s, it seems as if we have a few suspects to interrogate at this point.\nWho would you like to interrogate first?\n\n",name);
+	printf("1)Jenny, John's girlfriend\n2)James,John's best friend\n\n");
+	scanf("%d",&choice);
+}
+
+	//This function will interrogate 2 suspects with some dialogue options determining on previous decisions made in the game
+	Interrogation(gary2,name,interrogationcompletion,choice);
+	
+	//This function will ask the user who they think is the murderer and tell them if they are correct or not
+	Conclusion(name,gary2);
 }
 //Function declaration
 void GameIntro(char name[])
@@ -559,68 +579,139 @@ void GameIntro(char name[])
 	printf("It was a quiet night in Oakland until... MURDER! Yes that's right...\nA John D. Cranbury was found dead in Schenley Plaza. He was such a diligent, proactive, involved\nstudent that was respected and adored by many. However, with that much attention, one is always bound to draw enemies\nand John's days were numbered. That is why we need YOU, detective, to solve this crime.\nFirst..., remind me of your name again?\n");
 	scanf("%s",name);
 }
-void EvidenceExamination(int evi,int evidencecompletion[])
+void EvidenceExamination(int evi,int evidencecompletion[],char name[])
 {
+	/*Depending on the evidence detail the user selected, the resulting information will display
+	Each time a piece of evidence is reviewed the array "evidencecompletion" has a corresponding element updated to 1
+	This will continue until all 3 pieces of evidence have been reviewed and all 3 elements in the array have been updated to 1
+	*/
 	
-	do
+	while(evidencecompletion[0]+evidencecompletion[1]+evidencecompletion[2]!=3)
 	{
+		
+		
 	switch(evi)
 	{
 	case 1:
 	printf("\nThe victim was a 6 foot tall, 200 pound Caucasian male. The body was found around 12am on November 13, 2020. \nThe patient's medical history showed nothing of concern with no allergies or underlying conditions. \nThere were no external signs of trauma but an autopsy revealed that the victim had been poisoned with cyanide.\n");
 	evidencecompletion[0]=1;
+	
+	if(evidencecompletion[0]+evidencecompletion[1]+evidencecompletion[2]!=3)
+	{
 	printf("\nWhat evidence do you want to look at now?\n");
-	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
+	if(evidencecompletion[1]!=1)
+	{
+	printf("\n2) Belongings");
+}
+if(evidencecompletion[2]!=1)
+{
+	printf("\n3) Burger takeout plate\n");
+}
 	scanf("%d",&evi);
+	while(evi!=1&&evi!=2&&evi!=3)
+		{
+			printf("C'mon Detective %s! Quit horsin around. Which evidence do you want to look at now?\n",name);
+			scanf("%d",&evi);
+			
+		}
+}
 	break;
 	
 	case 2:
 	printf("\nThe victim was found wearing a collared shirt, jeans, a Rolex, and light rain jacket. While the watch was quite valuable and still remained, his shoes, wallet, and phone were taken.\n");
-	printf("\nWhat evidence do you want to look at now?\n");
-	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
-	scanf("%d",&evi);
 	evidencecompletion[1]=1;
+	
+	if(evidencecompletion[0]+evidencecompletion[1]+evidencecompletion[2]!=3)
+	{
+	printf("\nWhat evidence do you want to look at now?\n");
+	if(evidencecompletion[0]!=1)
+	{
+		printf("\n1) Cause of death");
+	}
+	if(evidencecompletion[2]!=1)
+	{
+		printf("\n3) Burger takeout plate\n");
+	}
+	scanf("%d",&evi);
+	while(evi!=1&&evi!=2&&evi!=3)
+		{
+			printf("C'mon Detective %s! Quit horsin around. Which evidence do you want to look at now?\n",name);
+			scanf("%d",&evi);
+			
+		}
+}
 	break;
 	
 	case 3:
 	printf("\nFound next to the victim was a takeout box with a burger with only one bite taken out of it.\n");
-	printf("\nWhat evidence do you want to look at now?\n");
-	printf("\n1) Cause of death\n2) Belongings\n3) Burger takeout plate\n");
-	scanf("%d",&evi);
 	evidencecompletion[2]=1;
+	
+	if(evidencecompletion[0]+evidencecompletion[1]+evidencecompletion[2]!=3)
+	{
+	printf("\nWhat evidence do you want to look at now?\n");
+	if(evidencecompletion[0]!=1)
+	{
+		printf("\n1) Cause of death");
+	}
+	
+	if(evidencecompletion[1]!=1)
+	{
+		printf("\n2) Belongings\n");
+	}
+	scanf("%d",&evi);
+	while(evi!=1&&evi!=2&&evi!=3)
+		{
+			printf("C'mon Detective %s! Quit horsin around. Which evidence do you want to look at now?\n",name);
+			scanf("%d",&evi);
+			
+		}
+}
 	break;
 }
-}while(evidencecompletion[0]!=1&&evidencecompletion[1]!=1&&evidencecompletion[2]!=1);
+
+}
 
 }
 int LocationExploration(int loc,char name[])
 {
-	int schenleychoice,gary2=0;
+	//Variables
+	int schenleychoice,gary2=0,progress;
 	switch(loc)
 	{
+		//Case 1 will run if the user decides to stay in Schenley plaza and go to John's dorm afterward
 	case 1:
-	printf("Well Detective %s, I think some of the best witnesses would be at that 'Porch' restaurant or maybe some of the shuttle drivers. What do you think?\n",name);
-	printf("1)The Porch employees\n2)Shuttle drivers\n");
+	printf("Well Detective %s, I think some of the best witnesses would be at that 'Porch' restaurant or \nmaybe some of the shuttle drivers. What do you think?\n",name);
+	printf("\n1)The Porch employees\n2)Shuttle drivers\n");
 	scanf("%d",&schenleychoice);
 	while(schenleychoice!=1&&schenleychoice!=2)
 	{
-		printf("%s We don't have time to waste! Who do you want to interrogate?\n",name);
+		printf("\n%s We don't have time to waste! Who do you want to interrogate?\n",name);
 		scanf("%d",&schenleychoice);
 	}
 	if(schenleychoice==1)
 	{
-		printf("Restaurant employee: Yeah I work here. Good thing you came in before we closed early. I saw John last night he ordered 3 burgers for him and his girlfriend Jenny and his buddy James.\n I remember he was wearing some really loud shoes that drew attention. They were some high top neon green Nikes. To me they were pretty ugly but John was such a sneakerhead and a good friend and I'm gonna miss him. Please find the man that killed him.\n");
+		printf("\nRestaurant employee: Yeah I work here. Good thing you came in before we closed early. I saw John last night he ordered 3 burgers for him and his girlfriend Jenny and his buddy James.\n I remember he was wearing some really loud shoes that drew attention. They were some high top neon green Nikes. To me they were pretty ugly but John was such a sneakerhead and a good friend and I'm gonna miss him. Please find the man that killed him.\n");
 		printf("\n\nThat gives us some more information. Damn, the shuttles left us. Let's go to John's dorm now.\n");
 	}
 	
 	else if(schenleychoice==2)
 	{
-		printf("Shuttle driver: I remember John's face. He came here with 2 other people earlier in the night but when his two friends rode the shuttle back it was just them. I think it was his girlfriend and another friend of his.\n");
+		printf("\nShuttle driver: I remember John's face. He came here with 2 other people earlier in the night but when his two friends rode the shuttle back it was just them.\nI think it was his girlfriend and another friend of his.\n");
 		printf("\n Ok we should look into his girlfriend and other friend that was with him. According to the bus' ID scanner history, a few hours before the time of death a Jenny A. and James B. caught the shuttle from Sutherland. Let's go check out The Porch. Oh no! They're closed!\nWell what do you want to do now?:\n1)Search victim's dorm\n2)Interrogate friends\n");
 	}
 	
+	printf("\nEnter 1 to continue to John's dorm.\n");
+	scanf("%d",&progress);
+	while(progress!=1)
+	{
+		printf("\nDetective %s! We're losing daylight here. Press 1 so we can get to John's dorm!\n",name);
+		scanf("%d",&progress);
+	}
+	//Case 2 will run if the user chose to go straight to John's dorm
 	case 2:
-	printf("\nThe victim lived on the 8th floor of Tower C in a single room. The room was cleaned almost in a suspicious manner. The victim appears to have quite the collection of shoes. The victim's MacBook is here but appears to be severely damaged. Perhaps the tech team can recover the hard drive's content. A container of cyanide was placed haphazardly in the middle of the floor.\nKNOCK! KNOCK!\n\nGary G:Hey I'm Gary, John's neighbor, what's going on over here?\n");
+	printf("\nThe victim lived on the 8th floor of Tower C in a single room. The room was cleaned almost in a suspicious manner.\n The victim appears to have quite the collection of shoes. The victim's MacBook is here but appears to be severely damaged. \nPerhaps the tech team can recover the hard drive's content. A container of cyanide was placed haphazardly in the middle of the floor.\nKNOCK! KNOCK!\n\nGary G:Hey I'm Gary, John's neighbor, what's going on over here?\n");
+	
+	//The variable "gary" will keep track of the course of the conversation that the user chooses between the detective and Gary
 	int gary;
 	while(gary!=1&&gary!=2)
 	{
@@ -629,11 +720,13 @@ int LocationExploration(int loc,char name[])
 }
 if(gary==2)
 {
-	printf("\nGeez man. You didn't have to turn me down like that. I might've had some helpful information for you. Have a good one jerk.\n");
+	printf("\nGary:Geez man. You didn't have to turn me down like that. I might've had some helpful information for you. Have a good one jerk.\n");
 }
 else if(gary==1)
 {
-	printf("\nOh yeah, RIP John. I'm gonna miss that dude. He always had the cleanest shoe game. Yesterday, he was wearing some fire kicks you should've seen em. I know his girlfriend was really obsessive and jealous over how he spent too much time and money towards his shoe collection. But I would literally KILL to have some of the kicks he had.\n");
+	printf("\nGary:Oh yeah, RIP John. I'm gonna miss that dude. He always had the cleanest shoe game.\nYesterday, he was wearing some fire kicks you should've seen em.\nI know his girlfriend was really obsessive and jealous over how he spent too much time and money towards his shoe collection.\nBut I would literally KILL to have some of the kicks he had.\n");
+	
+	//The variable "gary2" will keep further track of the converstion between the detective and Gary, how the user chooses to converse with Gary will depend on what information is revealed later in the game
 	gary2=0;
 	while(gary2!=1&&gary2!=2)
 	{
@@ -643,7 +736,7 @@ else if(gary==1)
 
 if(gary2==1)
 {
-	printf("\nGary: Yeah, I dunno if this has anything to do with the crime but I heard some noise outside my room that sounding like it was coming from John's room around midnight or 1 in the morning. I almost ignored it but I peeped outside and saw it was John's girlfriend going into his room. I didn't think much of it because she has visited him before so I just went back to bed.\n");
+	printf("\nGary: Yeah, I dunno if this has anything to do with the crime but I heard some noise outside my room that sounding like it was coming from John's room \naround midnight or 1 in the morning.\nI almost ignored it but I peeped outside and saw it was John's girlfriend going into his room.\nI didn't think much of it because she has visited him before so I just went back to bed.\n");
 }
 else if(gary2==2)
 {
@@ -654,4 +747,188 @@ else if(gary2==2)
 
 
 	return(gary2);
+}
+
+void Interrogation(int gary2,char name[],int interrogationcompletion[],int choice)
+{
+	int dialogue,progress;
+	
+while(interrogationcompletion[0]+1&&interrogationcompletion[1]!=2)
+{
+	//This will ask the user which suspect they would like to interrogate first
+	while(choice!=1&&choice!=2)
+	{
+	printf("\nDetective %s, it seems as if we have a few suspects to interrogate at this point.\nWho would you like to interrogate first?\n\n",name);
+	printf("1)Jenny, John's girlfriend\n2)James,John's best friend\n\n");
+	scanf("%d",&choice);
+}
+	//Dialogue between user and Jenny
+	/*The variable "choice" will determine if the user would like to intially interrogate Jenny or James and 
+	the variable "dialogue" will record the user's choices of dialogue options and tailor their path towards their decisions*/
+	if(choice==1)
+	{
+		printf("\nYou: Good morning, I'm Detective %s and we are conducting an investigation around the murder of your boyfriend, John Cranbury.\n\n",name);
+		printf("\nJenny: I'm happy to help Detective, but how do you know John was murdered?\n");
+		
+		while(dialogue!=1&&dialogue!=2)
+		{
+		printf("\nSelect a dialogue option:\n1)Our forensic scientist determined that John's death was caused by poisoning\n2)Just some details that have come to our attention point in that direction\n");
+		scanf("%d",&dialogue);
+	}
+		if(dialogue==1)
+		{
+			printf("\nJenny: Poisoned? Sounds like an interesting way to go... But I'm here to answer any questions you want Detective\n");
+			dialogue=0;
+		}
+		
+		if(dialogue==2)
+		{
+			printf("\nJenny: Well whoever did this must pay, I'm willing to help out in any manner you need.\n");
+			dialogue=0;
+		}
+		
+		printf("\nYou: When was the last time you saw John?\n");
+		printf("\nJenny: I saw him last around 11:30pm right before James and I got on the shuttle to go back to Sutherland\n");
+		printf("\nYou: And when did you get back to Sutherland?\n");
+		printf("\nJenny: Ummm.... To be honest... I kinda forgot. Sorry.\n");
+		while(dialogue!=1&&dialogue!=2)
+		{
+			printf("\nSelect a dialogue option:\n");
+			printf("\n1)Do you know anyone with any potential motives to harm John?\n2)Is it possible that you and John were having relationship issues?\n");
+			scanf("%d",&dialogue);
+		}
+		
+		if(dialogue==1)
+		{
+			printf("\nJenny: Nope. Are you insinuating something Detective %s? I don't want any more questions!\n",name);
+			dialogue=0;
+		}
+		
+		if(dialogue==2)
+		{
+			printf("\nJenny: How dare you! That is none of your businees! Get out of my face!\n");
+			dialogue=0;
+		}
+		if(gary2==1)
+		{
+			printf("\nYou: Sorry ma'am. Just one more thing.\nWere you in John's dorm last night between 12AM and 1AM?\n");
+			printf("\nJenny: Wha--- What are you talking about? That's ridiculous!\n");
+			printf("\nYou: According to John's neighbor, he saw you going into his room between midnight and 1AM in the morning, which is strange because John's time of death was around midnight\n");
+			printf("\nJenny: Well... Umm... I forgot something there and he game me his Panther ID to get it. Gary needs to mind his own business.\n");
+			printf("\nYou: Well thank you for your time Ms. Jenny. I am sorry for your loss.\n");
+			printf("\nJenny: It's alright detective. I'm glad I could help. It was time for me to move onto better things anyways.\n");
+		}
+		else if(gary2!=1)
+		{
+			printf("\nYou: I'm sorry Ms. Jenny. I'm sorry for your loss.\n");
+		}
+	
+		interrogationcompletion[0]=1;
+		if(interrogationcompletion[1]!=1)
+		{
+			while(progress!=1)
+			{
+				printf("\nAlright Detective %s, now we have to interrogate James. Let's go! (press 1 to continue) \n",name);
+				scanf("%d",&progress);
+			}
+			dialogue=0;
+			progress=0;
+			choice=2;
+		}
+	}
+	
+	//Dialogue between user and James
+	if(choice==2)
+	{
+		printf("\nYou: Good morning, I'm Detective %s and we are conducting an investigation around the murder of your friend, John Cranbury.\n\n",name);
+		printf("\nJames: Uhhhh... Yeah... Quite a shame.\n");
+		printf("\nYou: When did you last see John?\n");
+		printf("\nJames: Ummm... last night.\n");
+		while(dialogue!=1&&dialogue!=2)
+		{
+		printf("\nSelect a dialogue option:\n1)Where were you and who were you with last night\n2)Why are you so nervous?\n");
+		scanf("%d",&dialogue);
+	}
+	if(dialogue==1)
+	{
+		printf("\nJames: I was with ummm... Jenny in Schenley Plaza\n");
+		printf("\nYou: Was John with you?\n");
+		printf("\nJames: I... I think so... We got burgers from The Porch and sat on the lawn. John said he wasn't feeling well around 11:30pm but he just played it off as a stomach ache. Jenny and I got back on the shuttle to Sutherland and I went back to my dorm but Jenny didn't go back to hers. I don't know where she went though.\n");
+		dialogue=0;
+		//Depending on how thoroughly the user interrogated Gary, the neighbor, depends on if they unlock this dialogue option based on the value of the int "gary2"
+		if(gary2==1)
+		{
+			printf("\nYou: That's interesting. John's neighbor told us that he saw Jenny going to John's room around 12 or 1 in the morning\n");
+			printf("\nJames: Aw man... I had no clue... You don't think she...\n");
+			printf("\nYou: James, we are going to do everything in our power to find John's killer and we won't stop until we do.\n");
+			printf("\nJames: Thank you Detective %s, that means a lot to me.\n",name);
+		}
+		else if(gary2!=1)
+		{
+			printf("\nYou: Thank you for your time James.\n");
+			printf("\nJames: R-- Re--- Really...? Is that all?\n");
+			printf("\nYou: Yep. Thank you for your time James. I'm sorry for your loss.\n");
+			printf("\nJames: That means a lot to me Detective %s. Go find that killer.\n",name);
+		}
+	}
+	
+	if(dialogue==2)
+	{
+		printf("\nJames: I DON'T KNOW! Ok look...\nJenny has been acting fishy lately and she had some grudge against John and she's been passive agressive towards him before he passed.\nI know that she was jealous about his dedication to his shoe collection and it was causing some relationship issues. I know it sounds as dumb to you as it does to me.\nI'm not saying she did it because Jenny is my friend too but she's been acting strange lately.\nJohn was like a brother to me and I'm going to miss him.\n");
+		dialogue=0;
+		
+	}
+	interrogationcompletion[1]=1;
+	if(interrogationcompletion[0]!=1)
+		{
+			while(progress!=1)
+			{
+				printf("\nAlright Detective %s, now we have to interrogate Jenny. Let's go! (press 1 to continue) \n",name);
+				scanf("%d",&progress);
+			}
+			dialogue=0;
+			progress=0;
+			choice=1;
+	}
+	
+}
+	if(interrogationcompletion[0]+interrogationcompletion[1]==2)
+	{
+		break;
+	}
+}
+}
+
+void Conclusion(char name[],int gary2)
+{
+	int fin;
+	while(fin!=1&&fin!=2&&fin!=3)
+	{
+	printf("\nAlright Detective %s, who do you think did it?\n",name);
+	printf("\n1)Gary, the neighbor\n2)Jenny, the girlfriend\n3)James, the best friend\n");
+	scanf("%d",&fin);
+}
+	//Based on the user's decision on who he/she thought the killer was, the outcome will display based on the value of the variable "fin"
+	if(fin==1)
+	{
+		printf("\n Gary was not the killer! The true killer was Jenny, John's girlfriend who was motivated to do so by her jealousy of John's attention to his shoes over her.\n");
+		if(gary2!=1)
+		{
+			printf("\n Because you didn't ask Gary, the neighbor, enough questions, you failed to find out that Jenny was in John's dorm where presumptuously cleaned up and left the cyanide there.\n");
+		}
+	}
+	
+	if(fin==2)
+	{
+		printf("\nCongrats! You caught the true killer, Jenny. It's quite unfortunate that Jenny poisoned John because\n of his tendency to care for his shoe apparel and then plant the evidence in his room and destroy his laptop.\n At least we caught her and she can't hurt anyone else.\n");
+	}
+	
+	if(fin==3)
+	{
+		printf("\nNOPE! You let the killer get away detective. It was Jenny all along. Due to her unhealthy obsession with John, she got jealous over his shoe collection and his dedication to it and led her to kill John.\n");
+		if(gary2!=1)
+		{
+			printf("\n Because you didn't ask Gary, the neighbor, enough questions, you failed to find out that Jenny was in John's dorm where presumptuously cleaned up and left the cyanide there.\n");
+		}
+	}
 }
