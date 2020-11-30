@@ -930,7 +930,7 @@ void Conclusion(char name[],int gary2)
 		printf("\nNOPE! You let the killer get away detective. It was Jenny all along. Due to her unhealthy obsession with John, she got jealous over his shoe collection and his dedication to it and led her to kill John.\n");
 		if(gary2!=1)
 		{
-			printf("\n Because you didn't ask Gary, the neighbor, enough questions, you failed to find out that Jenny was in John's dorm where presumptuously cleaned up and left the cyanide there.\n");
+			printf("\n Because you didn't ask Gary, the neighbor, enough questions, you failed to find out that Jenny was in John's dorm where she presumptuously cleaned up and left the cyanide there.\n");
 		}
 	}
 }
