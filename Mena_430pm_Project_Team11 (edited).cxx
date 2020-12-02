@@ -112,7 +112,8 @@ int chopsticksMain()
 	printf("\nLet\'s play chopsticks!\n");
 	printf("Your goal: Beat the computer by eliminating both of their hands.\n");
 	printf("To eliminate a hand, hit it with one of yours, and the number of fingers will add.\n");
-	printf("If you hit the other player\'s hand so they have exactly five fingers, that hand is out.\n\n");
+	printf("If you hit the other player\'s hand so they have exactly five fingers, that hand is out.\n");
+	printf("If the hit adds to more than 5 fingers, they have the remainder of the addition by 5 on that hand.\n\n");
 	
 	//draw hands
 		drawHands(user,computer);
