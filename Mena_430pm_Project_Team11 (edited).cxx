@@ -2,11 +2,28 @@
  * Jack Carnovale, Mychal Amoafo, Peter Dadson
  * Team 11
  * Portfolio Project 
+ * 
+ * 
+ * 2 Games: Chopsticks and Who Dunnit.
+ * 
+ * Chopsticks is a player vs computer game where your goal is to eliminate both the other player's hands.
+ * Each player starts with one finger on each hand. Every turn is one player hitting one of the other player's hands 
+ * with one of their hands. When a hand is hit, it now has the remainder of the sum of the total number of fingers (on the hand used and hand hit) divided by 5.
+ * When the remainder yields 0, that hand is out.  When a player has 0 on one hand and more than 1 finger on another, they can split
+ * and send some (but not all) of those fingers to the other hand. The game ends when either the user or computer has both hands eliminated (0 fingers on both)
+ * or the user can always quit prematurely. The user will be entering which hand to hit and which hand to use (numerical entry), or how many fingers to move to another hand.
+ * The game alternates between user and computer turns.
+ * 
+ * Who Dunnit is a one player murder mystery game that is played by selecting various dialogue or action prompts while walking through the various locations
+ * in the story as a detective trying to solve a murder. Throughout the game the user will give numerical input to choose different routes of trying to solve the mystery.
+ * In each repetition of the game the user can create a different outputted dialogue and story than the last time. They can talk to people in different orders,
+ * go to different locations, or have differing conversations depending on what selections they make.
+ * The game eventually ends with the user picking who they think commmitted the murder.
  */
+ 
 #include <stdlib.h>
 #include <stdio.h>
 
-//function prototypes
 int chopsticksMain();
 void drawHands(int[],int[]);
 void printFingers(char);
@@ -22,10 +39,15 @@ void Interrogation(int,char[],int[],int);
 void Conclusion(char[],int);
 
 int main(){
-	//Variable declarations 
+	//Variables
 	int gamechoice,chopResult;
+	char again='y';
 	
-	
+	//let them keep playing as long as they want
+	while(again=='y')
+	{
+		gamechoice=3;
+		
 	//Asks user which game they want to play, either Chopsticks or Who Dunnit?
 	while(gamechoice!=1&&gamechoice!=2)
 	{
@@ -36,12 +58,6 @@ int main(){
 	//Will run Chopsticks
 	if(gamechoice==1)
 	{
-		//variable declaration 
-		char prog_cond; 
-		
-		//do...while loop to repeat the program 
-		do
-		{
 		chopResult=chopsticksMain();
 		//display result of game
 		switch (chopResult)
@@ -62,31 +78,26 @@ int main(){
 				break;
 			}
 		}
-	
-	//gives the variable a value to force error checking 	
-	prog_cond='s'; 
-	
-	//while loop which error checks the user inputs 
-	while(prog_cond!='y' && prog_cond!='n')
-	{
-		printf("Would you like to play again y/n?"); 
-		scanf(" %c", &prog_cond); 	
-	}	
-		
-	}while(prog_cond=='y'); 
-	
 	}
-	 
 	 
 	//Will run Who Dunnit?
 	if(gamechoice==2)
 	{
 		WhoDunnit();
 	}
-	return 0;
 	
+	again ='o';
+	
+	//ask if want to run the program again
+	while(again!='y' && again !='n')
+	{
+		printf("Would you like to play another game? (y/n): ");
+		scanf(" %c",&again);
+	}
+		
+	}
+	return 0;
 }
-
 
 int chopsticksMain()
 {
@@ -625,6 +636,9 @@ void GameIntro(char name[])
 {
 	printf("It was a quiet night in Oakland until... MURDER! Yes that's right...\nA John D. Cranbury was found dead in Schenley Plaza. He was such a diligent, proactive, involved\nstudent that was respected and adored by many. However, with that much attention, one is always bound to draw enemies\nand John's days were numbered. That is why we need YOU, detective, to solve this crime.\nFirst..., remind me of your name again?\n");
 	scanf("%s",name);
+	
+	//make sure it doesn't continually loop if enter spaces or multiple names
+	fflush(stdin);
 }
 void EvidenceExamination(int evi,int evidencecompletion[],char name[])
 {
@@ -875,6 +889,7 @@ while(interrogationcompletion[0]+1&&interrogationcompletion[1]!=2)
 		interrogationcompletion[0]=1;
 		if(interrogationcompletion[1]!=1)
 		{
+			progress=0;
 			while(progress!=1)
 			{
 				printf("\nAlright Detective %s, now we have to interrogate James. Let's go! (press 1 to continue) \n",name);
@@ -930,6 +945,7 @@ while(interrogationcompletion[0]+1&&interrogationcompletion[1]!=2)
 	interrogationcompletion[1]=1;
 	if(interrogationcompletion[0]!=1)
 		{
+			progress=0;
 			while(progress!=1)
 			{
 				printf("\nAlright Detective %s, now we have to interrogate Jenny. Let's go! (press 1 to continue) \n",name);
